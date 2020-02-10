@@ -1,23 +1,19 @@
 # encoding: UTF-8
 # language: ru
 @rest
-Функционал: API. GET запросы ufr-azon-reports-api/reports
+Функционал: REST. http://petstore.swagger.io/#/pet/
 
-  @get1 @sleep5
-  Структура сценария: GET запрос с reportType --> получаем соответствующий name
-    * Послали GET 'http://ufrmspr1/ufr-azon-reports-api/reports/?orid=000AJN&usid=0000000I0L&reportType=<reportType>' запрос
-    * Проверили, что http status code == 200
-    * Проверили, что параметр <reportType> соответствует названию <name>
+  @assa
+  Структура сценария: Запрос findByStatus с опр. статусом --> всех животных ТОЛЬКО с этим статусом
+    * Послали GET 'http://petstore.swagger.io/#/pet/findByStatus?status=<status>' запрос
+#    * Проверили, что http status code == 200
+#    * Проверили, что параметр <reportType> соответствует названию <name>
 
     Примеры:
-      | reportType | name                  |
-      | R00A       | Новые счета           |
-      | R00B       | Анкета                |
-      | R00R       | Реестр начислений     |
-      | R00E       | Параметры сотрудника  |
-      | R00D       | Анкета для черновика  |
-      | RPPR       | Анкета для партнеров  |
-      | RPRC       | Выписка для партнеров |
+      | status    |
+      | available |
+      | pending   |
+      | sold      |
 
   @get2 @sleep5
   Структура сценария: GET запрос без reportType --> status code == 200
