@@ -1,5 +1,4 @@
-# source :rubygems
-# BDD
+source "https://rubygems.org"
 
 gem 'rubyzip'
 gem 'cucumber', '=3.1.0'
