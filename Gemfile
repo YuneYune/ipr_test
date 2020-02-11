@@ -1,5 +1,3 @@
-source 'http://mvn/artifactory/api/gems/rubygems/'
-source 'http://mvn/artifactory/api/gems/rubygems-local/'
 # source :rubygems
 # BDD
 
