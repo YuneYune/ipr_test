@@ -5,7 +5,7 @@ require 'jsonpath'
 When(/^Послали POST на URL "([^"]*)" с параметрами:$/) do |urn, table|
   payload_hash = {}
   headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
-  table.hashes.each {|param| payload_hash = payload_hash.merge(Hash[param[:key], param[:value]])}
+  table.hashes.each { |param| payload_hash = payload_hash.merge(Hash[param[:key], param[:value]]) }
   payload_hash = payload_hash.to_json
   send_post(urn, payload_hash, headers_hash)
 end
@@ -25,12 +25,20 @@ When(/Проверили, что в ответе значение парамет
   end
 end
 
-When(/Проверили, что параметр (.*) соответствует названию (.*)/) do |reportType, name|
+When(/Проверили, что в ответе статус у всех животных == (.*) GET запроса/) do |get_status|
   arr_of_hashes = JSON.parse @last_response.body
+  puts get_status
   arr_of_hashes.each do |value|
-    expect(value["#{reportType}"]).to eq(value["#{name}"])
+    expect(value['status']).to eq(value["#{get_status}"])
   end
 end
+
+# When(/Проверили, что параметр (.*) соответствует названию (.*)/) do |reportType, name|
+#   arr_of_hashes = JSON.parse @last_response.body
+#   arr_of_hashes.each do |value|
+#     expect(value["#{reportType}"]).to eq(value["#{name}"])
+#   end
+# end
 
 When(/Проверили, что http status code == (\d*)/) do |code|
   expect(code).to eq(@last_response.code.to_s)
@@ -49,7 +57,6 @@ When(/^Послали GET '([^"]*)' запрос$/) do |url|
   @response = send_get url
   log_response_params @last_response.code, @last_response.headers, @last_response.body
   @last_response = @response
-  puts @response
 end
 
 When(/Запомнили значение параметра (.*), который получили после POST запроса/) do |param|
@@ -76,14 +83,14 @@ end
 When(/Сверили запомненное значение со значением параметра - (.*) из SQL таблицы (.*)/) do |param, sql_table|
   step "Инициализировали sql подключение"
   step "Настроили параметры подключения к ALFAMOSU"
-  step "SQL: SELECT * FROM afilb01.#{sql_table} WHERE #{sql_table[0,3].upcase}#{param.upcase} = '#{@value_to_remember}'"
+  step "SQL: SELECT * FROM afilb01.#{sql_table} WHERE #{sql_table[0, 3].upcase}#{param.upcase} = '#{@value_to_remember}'"
   @sql = sql_table
   @parametr = param
-  expect(@sql_to_remember[0]["#{sql_table[0,3].upcase}#{param.upcase}"]).to eq(@value_to_remember)
+  expect(@sql_to_remember[0]["#{sql_table[0, 3].upcase}#{param.upcase}"]).to eq(@value_to_remember)
 end
 
 When(/Проверили, что поле (.*) записи в SQL таблице (.*) == (.*)/) do |name, sql_table, value|
-  expect(@sql_to_remember[0]["#{sql_table[0,3].upcase}#{name.upcase}"]).to eq(value)
+  expect(@sql_to_remember[0]["#{sql_table[0, 3].upcase}#{name.upcase}"]).to eq(value)
 end
 
 When(/Пытаемся скачать отчёт по запомненному (.*) пользователем с USID - (.*), ORID - (.*), у которого недостаточно прав/) do |rpid, usid, orid|
@@ -94,10 +101,10 @@ When(/Ждём (.*) минут, или пока поле (.*) в SQL табли�
   step "Инициализировали sql подключение"
   step "Настроили параметры подключения к ALFAMOSU"
   wait_while(minute.to_i * 60, 10) do
-    step "SQL: SELECT * FROM afilb01.#{sql_table} WHERE #{sql_table[0,3].upcase}#{@parametr.upcase} = '#{@value_to_remember}'"
-    @sql_to_remember[0]["#{sql_table[0,3].upcase}#{param.upcase}"] != value
+    step "SQL: SELECT * FROM afilb01.#{sql_table} WHERE #{sql_table[0, 3].upcase}#{@parametr.upcase} = '#{@value_to_remember}'"
+    @sql_to_remember[0]["#{sql_table[0, 3].upcase}#{param.upcase}"] != value
   end
-  expect(@sql_to_remember[0]["#{sql_table[0,3].upcase}#{param.upcase}"]).to eq(value)
+  expect(@sql_to_remember[0]["#{sql_table[0, 3].upcase}#{param.upcase}"]).to eq(value)
 end
 
 When(/Делаем составной SQL запрос/) do

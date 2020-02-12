@@ -1,6 +1,7 @@
 #UI-test
 # require 'selenium-webdriver'
 require 'cucumber'
+require 'open-uri'
 
 require 'rest-client'
 

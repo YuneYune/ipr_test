@@ -1,13 +1,14 @@
 # encoding: UTF-8
 # language: ru
+
 @rest
-Функционал: REST. http://petstore.swagger.io/#/pet/
+Функционал: REST. http://petstore.swagger.io
 
   @assa
   Структура сценария: Запрос findByStatus с опр. статусом --> всех животных ТОЛЬКО с этим статусом
-    * Послали GET 'http://petstore.swagger.io/#/pet/findByStatus?status=<status>' запрос
-#    * Проверили, что http status code == 200
-#    * Проверили, что параметр <reportType> соответствует названию <name>
+    * Послали GET 'https://petstore.swagger.io/v2/pet/findByStatus?status=<status>' запрос
+    * Проверили, что http status code == 200
+    * Проверили, что в ответе статус у всех животных == <status> GET запроса
 
     Примеры:
       | status    |
