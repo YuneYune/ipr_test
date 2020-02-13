@@ -40,12 +40,7 @@ When(/Проверили, что в ответе статус у всех жив
   end
 end
 
-# When(/Проверили, что параметр (.*) соответствует названию (.*)/) do |reportType, name|
-#   arr_of_hashes = JSON.parse @last_response.body
-#   arr_of_hashes.each do |value|
-#     expect(value["#{reportType}"]).to eq(value["#{name}"])
-#   end
-# end
+
 
 When(/Проверили, что http status code == (\d*)/) do |code|
   expect(code).to eq(@last_response.code.to_s)
