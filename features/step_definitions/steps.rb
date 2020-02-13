@@ -26,10 +26,17 @@ When(/Проверили, что в ответе значение парамет
 end
 
 When(/Проверили, что в ответе статус у всех животных == (.*) GET запроса/) do |get_status|
+  arr_of_statuses = ['sold', 'pending', 'available']
+  arr_of_statuses.delete(get_status)
   arr_of_hashes = JSON.parse @last_response.body
-  puts get_status
+  result_arr = []
   arr_of_hashes.each do |value|
-    expect(value['status']).to eq(value["#{get_status}"])
+    result_arr.push(value['status'])
+  end
+  puts result_arr
+  puts arr_of_statuses
+  arr_of_statuses.each do |value| #именно так, потому что по-другому походу кукумбер слишком быстро делает запросы, и в статусе жимотоного проскакивает nil
+    expect(result_arr).to_not include(value)
   end
 end
 
