@@ -4,7 +4,7 @@
 @rest
 Функционал: REST. http://petstore.swagger.io
 
-  @assa
+  @findByStatus
   Структура сценария: Запрос findByStatus с опр. статусом --> всех животных ТОЛЬКО с этим статусом
     * Послали GET 'https://petstore.swagger.io/v2/pet/findByStatus?status=<status>' запрос
     * Проверили, что http status code == 200
@@ -16,14 +16,29 @@
       | pending   |
       | sold      |
 
-  @get2 @sleep5
-  Структура сценария: GET запрос без reportType --> status code == 200
-    * Послали GET 'http://ufrmspr1/ufr-azon-reports-api/reports/?orid=000AJN&usid=0000000I0L&reportType=<reportType>' запрос
+
+  @create
+  Структура сценария: Создание животного
+    * Удалили животное с id, которое будем добавлять, послав DELETE запрос на URL 'https://petstore.swagger.io/v2/pet/<id>'
+    * Послали POST на URL "https://petstore.swagger.io/v2/pet" с параметрами:
+      | key    | value                                                       |
+      | id     | <id>                                                        |
+      | c_id   | 228                                                         |
+      | c_name | flex                                                        |
+      | name   | <name>                                                      |
+      | ph_url | https://m.media-amazon.com/images/I/81rCvbYgMKL._SS500_.jpg |
+      | t_id   | 1488                                                        |
+      | t_name | wild                                                        |
+      | status | available                                                   |
     * Проверили, что http status code == 200
+    * Послали GET 'https://petstore.swagger.io/v2/pet/<id>' запрос
+    * Убедились, что животное добавлено, сравнив параметры POST и GET запросов
 
     Примеры:
-      | reportType |
-      |            |
+      | id   | name   |
+      | 228  | jiraf  |
+      | 1488 | sobaka |
+      | 2020 | koshka |
 
 
   @get3 @sleep5

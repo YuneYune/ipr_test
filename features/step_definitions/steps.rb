@@ -3,11 +3,40 @@
 require 'jsonpath'
 
 When(/^Послали POST на URL "([^"]*)" с параметрами:$/) do |urn, table|
-  payload_hash = {}
+  variables = table.raw.flatten
+  payload_hash = {
+      "id": "#{variables[3]}".to_i,
+      "category": {
+          "id": "#{variables[5]}".to_i,
+          "name": "#{variables[7]}"
+      },
+      "name": "#{variables[9]}",
+      "photoUrls": [
+          "#{variables[11]}"
+      ],
+      "tags": [
+          {
+              "id": "#{variables[13]}".to_i,
+              "name": "#{variables[15]}"
+          }
+      ],
+      "status": "#{variables[17]}"
+  }
   headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
-  table.hashes.each { |param| payload_hash = payload_hash.merge(Hash[param[:key], param[:value]]) }
   payload_hash = payload_hash.to_json
+  puts payload_hash
+  puts headers_hash
+  @animal = payload_hash #json
   send_post(urn, payload_hash, headers_hash)
+end
+
+When(/^Удалили животное с id, которое будем добавлять, послав DELETE запрос на URL '(.*)'$/) do |url|
+  headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+  send_delete(url, headers_hash)
+end
+
+When(/^Убедились, что животное добавлено, сравнив параметры POST и GET запросов$/) do
+  expect(@last_response.body == @animal).to be true
 end
 
 
@@ -33,16 +62,15 @@ When(/Проверили, что в ответе статус у всех жив
   arr_of_hashes.each do |value|
     result_arr.push(value['status'])
   end
-  puts result_arr
-  puts arr_of_statuses
+  # puts result_arr
+  # puts arr_of_statuses
   arr_of_statuses.each do |value| #именно так, потому что по-другому походу кукумбер слишком быстро делает запросы, и в статусе жимотоного проскакивает nil
     expect(result_arr).to_not include(value)
   end
 end
 
 
-
-When(/Проверили, что http status code == (\d*)/) do |code|
+When(/^Проверили, что http status code == (\d*)/) do |code|
   expect(code).to eq(@last_response.code.to_s)
 end
 
@@ -57,7 +85,7 @@ end
 
 When(/^Послали GET '([^"]*)' запрос$/) do |url|
   @response = send_get url
-  log_response_params @last_response.code, @last_response.headers, @last_response.body
+  # log_response_params @last_response.code, @last_response.headers, @last_response.body
   @last_response = @response
 end
 
@@ -66,7 +94,7 @@ When(/Запомнили значение параметра (.*), которы�
   @value_to_remember = arr_of_hashes["#{param}"]
 end
 
-When(/Сверили значение полученного параметра (.*) с запомненным/) do |param|
+When(/^Сверили значение полученного параметра (.*) с запомненным/) do |param|
   step "Находим значение ключа #{param} и сравниваем с #{@value_to_remember}"
 end
 

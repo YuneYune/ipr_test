@@ -23,9 +23,8 @@ def send_post(url, payload, headers = {})
 end
 
 def send_delete(path, headers = {})
-  puts url = Settings.ufr_host + path
-  log_rest_params "Url = #{url} ", 'payload = NULL ', "headers = #{headers} "
-  RestClient.delete(url, headers) do |response, _request, _result|
+  # log_rest_params "Url = #{url} ", 'payload = NULL ', "headers = #{headers} "
+  RestClient.delete(path, headers) do |response, _request, _result|
     case response.code
     when 301, 302, 307
       @last_response = response.follow_redirection
@@ -37,20 +36,20 @@ end
 
 # логируем запрос
 def log_rest_params(url, payload, headers)
-  # puts __method__.to_s
-  # puts url
-  # puts payload
-  # puts headers
+  puts __method__.to_s
+  puts url
+  puts payload
+  puts headers
 end
 
 # логируем ответ
 def log_response_params(code, headers, body)
-#   puts __method__.to_s
-#   puts "response_code = #{code} "
-#   puts "response_head = #{headers} "
-#   parsed = body && body.length >= 2 && (json_string? body) ? JSON.parse(body) : {}
-# #  puts "response_body = #{JSON.pretty_generate(JSON.parse(parsed.to_json))} "
-#   puts "response_body = #{JSON.parse(parsed.to_json).to_s} "
+  puts __method__.to_s
+  puts "response_code = #{code} "
+  puts "response_head = #{headers} "
+  parsed = body && body.length >= 2 && (json_string? body) ? JSON.parse(body) : {}
+ puts "response_body = #{JSON.pretty_generate(JSON.parse(parsed.to_json))} "
+  puts "response_body = #{JSON.parse(parsed.to_json).to_s} "
 end
 
 # проверяем валидность json
