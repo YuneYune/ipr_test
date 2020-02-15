@@ -2,41 +2,60 @@
 
 require 'jsonpath'
 
-When(/^Послали POST на URL "([^"]*)" с параметрами:$/) do |urn, table|
-  variables = table.raw.flatten
-  payload_hash = {
-      "id": "#{variables[3]}".to_i,
-      "category": {
-          "id": "#{variables[5]}".to_i,
-          "name": "#{variables[7]}"
-      },
-      "name": "#{variables[9]}",
-      "photoUrls": [
-          "#{variables[11]}"
-      ],
-      "tags": [
-          {
-              "id": "#{variables[13]}".to_i,
-              "name": "#{variables[15]}"
-          }
-      ],
-      "status": "#{variables[17]}"
-  }
-  headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
-  payload_hash = payload_hash.to_json
-  puts payload_hash
-  puts headers_hash
-  @animal = payload_hash #json
+When(/^Послали POST на URL '([^"]*)' с параметрами (.*):$/) do |urn, type, table|
+  if type == 'животного' # создаём животное
+    variables = table.raw.flatten
+    payload_hash = {
+        "id": "#{variables[3]}".to_i,
+        "category": {
+            "id": "#{variables[5]}".to_i,
+            "name": "#{variables[7]}"
+        },
+        "name": "#{variables[9]}",
+        "photoUrls": [
+            "#{variables[11]}"
+        ],
+        "tags": [
+            {
+                "id": "#{variables[13]}".to_i,
+                "name": "#{variables[15]}"
+            }
+        ],
+        "status": "#{variables[17]}"
+    }
+    headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+    payload_hash = payload_hash.to_json
+  else # создаём заказ
+    variables = table.raw.flatten
+    payload_hash = {
+        "id": "#{variables[3]}".to_i,
+        "petId": "#{variables[5]}".to_i,
+        "quantity": "#{variables[7]}".to_i,
+        "shipDate": "#{variables[9]}",
+        "status": "#{variables[11]}",
+        "complete": (!!"#{variables[13]}")
+    }
+    headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+    payload_hash = payload_hash.to_json
+  end
   send_post(urn, payload_hash, headers_hash)
+  @requests_payload = payload_hash #json
 end
 
-When(/^Удалили животное с id, которое будем добавлять, послав DELETE запрос на URL '(.*)'$/) do |url|
+When(/^Удалили (.*) с id, которое будем добавлять, послав DELETE запрос на URL '(.*)'$/) do |unnecessary, url|
   headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
   send_delete(url, headers_hash)
 end
 
-When(/^Убедились, что животное добавлено, сравнив параметры POST и GET запросов$/) do
-  expect(@last_response.body == @animal).to be true
+When(/^Убедились, что мы добавили (.*), сравнив параметры POST и GET запросов$/) do |type|
+  @last_response = @last_response.body
+  if type == 'заказ'
+    @requests_payload = JSON.parse @requests_payload
+    @last_response = JSON.parse @last_response
+    @requests_payload.delete('shipDate')
+    @last_response.delete('shipDate')
+  end
+  expect(@last_response == @requests_payload).to be true
 end
 
 
@@ -69,9 +88,12 @@ When(/Проверили, что в ответе статус у всех жив
   end
 end
 
-
-When(/^Проверили, что http status code == (\d*)/) do |code|
+When(/^Проверили, что http status code == (\d*)$/) do |code|
   expect(code).to eq(@last_response.code.to_s)
+end
+
+When(/^Проверили, что status code == (\d*) или (\d*)$/) do |code1, code2|
+  expect(@last_response.code.to_s).to eq(code1).or eq(code2)
 end
 
 When(/Проверили, что статус ошибки (.*) соответствует названию ошибки (.*)/) do |status_code, error|
@@ -135,11 +157,6 @@ When(/Ждём (.*) минут, или пока поле (.*) в SQL табли�
     @sql_to_remember[0]["#{sql_table[0, 3].upcase}#{param.upcase}"] != value
   end
   expect(@sql_to_remember[0]["#{sql_table[0, 3].upcase}#{param.upcase}"]).to eq(value)
-end
-
-When(/Делаем составной SQL запрос/) do
-  str = ""
-  step "SQL: #{str}"
 end
 
 When(/Удостоверились, что мы получили ошибку - (.*)/) do |error|

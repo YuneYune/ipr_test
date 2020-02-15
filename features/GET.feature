@@ -17,10 +17,11 @@
       | sold      |
 
 
-  @create
+  @create_an_animal
   Структура сценария: Создание животного
     * Удалили животное с id, которое будем добавлять, послав DELETE запрос на URL 'https://petstore.swagger.io/v2/pet/<id>'
-    * Послали POST на URL "https://petstore.swagger.io/v2/pet" с параметрами:
+    * Проверили, что status code == 200 или 404
+    * Послали POST на URL 'https://petstore.swagger.io/v2/pet' с параметрами животного:
       | key    | value                                                       |
       | id     | <id>                                                        |
       | c_id   | 228                                                         |
@@ -32,13 +33,35 @@
       | status | available                                                   |
     * Проверили, что http status code == 200
     * Послали GET 'https://petstore.swagger.io/v2/pet/<id>' запрос
-    * Убедились, что животное добавлено, сравнив параметры POST и GET запросов
+    * Убедились, что мы добавили животное, сравнив параметры POST и GET запросов
 
     Примеры:
       | id   | name   |
       | 228  | jiraf  |
       | 1488 | sobaka |
       | 2020 | koshka |
+
+  @create_an_order
+  Структура сценария: Создание заказа
+    * Удалили заказ с id, которое будем добавлять, послав DELETE запрос на URL 'https://petstore.swagger.io/v2/store/order/<id>'
+    * Проверили, что status code == 200 или 404
+    * Послали POST на URL 'https://petstore.swagger.io/v2/store/order' с параметрами заказа:
+      | key      | value                    |
+      | id       | <id>                     |
+      | petId    | 228                      |
+      | quantity | 100                      |
+      | shipDate | 2020-08-15T20:20:20.671Z |
+      | status   | <status>                 |
+      | complete | false                    |
+    * Проверили, что http status code == 200
+    * Послали GET 'https://petstore.swagger.io/v2/store/order/<id>' запрос
+    * Убедились, что мы добавили заказ, сравнив параметры POST и GET запросов
+
+    Примеры:
+      | id   | status    |
+      | 228  | placed    |
+      | 1488 | approved  |
+      | 2020 | delivered |
 
 
   @get3 @sleep5
