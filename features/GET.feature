@@ -4,7 +4,7 @@
 @rest
 Функционал: REST. http://petstore.swagger.io
 
-  @findByStatus
+  @findByStatus @all
   Структура сценария: Запрос findByStatus с опр. статусом --> всех животных ТОЛЬКО с этим статусом
     * Послали GET 'https://petstore.swagger.io/v2/pet/findByStatus?status=<status>' запрос
     * Проверили, что http status code == 200
@@ -17,8 +17,8 @@
       | sold      |
 
 
-  @create_an_animal
-  Структура сценария: Создание животного
+  @create_an_animal @all
+  Структура сценария: Зачистили id, под которым будем создавать животное --> Создали животное --> Нашли и проверили его
     * Удалили животное с id, которое будем добавлять, послав DELETE запрос на URL 'https://petstore.swagger.io/v2/pet/<id>'
     * Проверили, что status code == 200 или 404
     * Послали POST на URL 'https://petstore.swagger.io/v2/pet' с параметрами животного:
@@ -41,8 +41,8 @@
       | 1488 | sobaka |
       | 2020 | koshka |
 
-  @create_an_order
-  Структура сценария: Создание заказа
+  @create_an_order @all
+  Структура сценария: Зачистили id, под которым будем создавать заказ --> Создали заказ --> Нашли и проверили его
     * Удалили заказ с id, которое будем добавлять, послав DELETE запрос на URL 'https://petstore.swagger.io/v2/store/order/<id>'
     * Проверили, что status code == 200 или 404
     * Послали POST на URL 'https://petstore.swagger.io/v2/store/order' с параметрами заказа:
@@ -64,88 +64,83 @@
       | 2020 | delivered |
 
 
-  @get3 @sleep5
-  Структура сценария: GET запрос --> получил валидную длинну параметров
-    * Послали GET 'http://ufrmspr1/ufr-azon-reports-api/reports/?orid=000AJN&usid=0000000I0L&reportType=R00A' запрос
+  @update_an_animal @all
+  Структура сценария: Обновление животного
+    * Удалили животное с id, которое будем добавлять, послав DELETE запрос на URL 'https://petstore.swagger.io/v2/pet/1488'
+    * Проверили, что status code == 200 или 404
+    * Послали POST на URL 'https://petstore.swagger.io/v2/pet' с параметрами животного:
+      | key    | value                                                       |
+      | id     | 1488                                                        |
+      | c_id   | 228                                                         |
+      | c_name | flex                                                        |
+      | name   | programmist                                                 |
+      | ph_url | https://m.media-amazon.com/images/I/81rCvbYgMKL._SS500_.jpg |
+      | t_id   | 1488                                                        |
+      | t_name | wild                                                        |
+      | status | available                                                   |
     * Проверили, что http status code == 200
-    * Проверили, что в ответе значение параметра <param> имеет длину <length>
+    * Послали PUT на URL 'https://petstore.swagger.io/v2/pet/updatePet' с параметрами:
+      | key    | value                                                       |
+      | id     | 1488                                                        |
+      | c_id   | 228                                                         |
+      | c_name | flex                                                        |
+      | name   | <name>                                                      |
+      | ph_url | https://m.media-amazon.com/images/I/81rCvbYgMKL._SS500_.jpg |
+      | t_id   | 1488                                                        |
+      | t_name | wild                                                        |
+      | status | <status>                                                    |
+    * Послали GET 'https://petstore.swagger.io/v2/store/order/1488' запрос
+    * Убедились, что мы обновили животное, сравнив параметры PUT и GET запросов
 
     Примеры:
-      | param | length |
-      | rpid  | 10     |
-      | type  | 4      |
+      | name     | status    |
+      | zmeya    | sold      |
+      | tarantul | pending   |
+      | pingvin  | available |
 
 
-  @get4 @sleep5
-  Структура сценария: GET запрос с невалидным "orid" --> status code == 500
-    * Послали GET 'http://ufrmspr1/ufr-azon-reports-api/reports/?orid=<orid>&usid=0000000I0L&reportType=R00A' запрос
-    * Проверили, что статус ошибки 500 соответствует названию ошибки internalError
-
-    Примеры:
-      | orid     |
-      | 000AJ    |
-      | 000A     |
-      | 000AJNg  |
-      | 000AJNkk |
-      | 000AJN0  |
-      | 000AJN55 |
-      | 000AJN-  |
-      | 000AJN-- |
-
-  @get5 @sleep5 @ZPFL1-2722
-  Структура сценария: GET запрос с невалидным "usid" --> status code == 500
-    * Послали GET 'http://ufrmspr1/ufr-azon-reports-api/reports/?orid=000AJN&usid=<usid>&reportType=R00A' запрос
-    * Проверили, что статус ошибки 500 соответствует названию ошибки internalError
+  @delete_an_animal @all
+  Структура сценария: Создали животное --> Удалили животное --> Попытались найти удал. животное --> error
+    * Послали POST на URL 'https://petstore.swagger.io/v2/pet' с параметрами животного:
+      | key    | value                                                       |
+      | id     | <id>                                                        |
+      | c_id   | 228                                                         |
+      | c_name | flex                                                        |
+      | name   | <name>                                                      |
+      | ph_url | https://m.media-amazon.com/images/I/81rCvbYgMKL._SS500_.jpg |
+      | t_id   | 1488                                                        |
+      | t_name | wild                                                        |
+      | status | available                                                   |
+    * Проверили, что http status code == 200
+    * Послали DELETE 'https://petstore.swagger.io/v2/pet/<id>' запрос
+    * Послали GET 'https://petstore.swagger.io/v2/pet/<id>' запрос
+    * Проверили, что http status code == 404
 
     Примеры:
-      | usid        |
-      | 0000000I0   |
-      | 0000000I    |
-      | 0000000I0Ll |
-      | 0000000I0L- |
+      | id   | name   |
+      | 228  | jiraf  |
+      | 1488 | sobaka |
+      | 2020 | koshka |
 
 
-  @get6 @sleep5
-  Структура сценария: GET запрос с невалидным "reportType" --> status code == 400
-    * Послали GET 'http://ufrmspr1/ufr-azon-reports-api/reports/?orid=000AJN&usid=0000000I0L&reportType=<reportType>' запрос
-    * Проверили, что статус ошибки 400 соответствует названию ошибки validationError
-
-    Примеры:
-      | reportType |
-      | R00AA      |
-      | R000       |
-      | R002       |
-      | R00A1      |
-      | R00        |
-      | R00a       |
-      | R00z       |
-      | R00A-      |
-      | R00-       |
-
-
-  @get7 @sleep5 @ZPFL1-2693 @ZPFL1-2692
-  Структура сценария: GET запрос с пустыми "orid" и/или "usid" --> status code == 500
-    * Послали GET 'http://ufrmspr1/ufr-azon-reports-api/reports/?orid=<orid>&usid=<usid>&reportType=R00A' запрос
-    * Проверили, что статус ошибки 500 соответствует названию ошибки internalError
+  @delete_an_animal @all
+  Структура сценария: Создали заказ --> Удалили заказ --> Попытались найти удал. заказ --> error
+    * Послали POST на URL 'https://petstore.swagger.io/v2/store/order' с параметрами заказа:
+      | key      | value                    |
+      | id       | <id>                     |
+      | petId    | 228                      |
+      | quantity | 100                      |
+      | shipDate | 2020-08-15T20:20:20.671Z |
+      | status   | <status>                 |
+      | complete | false                    |
+    * Проверили, что http status code == 200
+    * Послали DELETE 'https://petstore.swagger.io/v2/store/order/<id>' запрос
+    * Послали GET 'https://petstore.swagger.io/v2/store/order/<id>' запрос
+    * Проверили, что http status code == 404
 
     Примеры:
-      | orid   | usid       |
-      |        | 0000000I0L |
-      | 000AJN |            |
-      |        |            |
+      | id   | status    |
+      | 228  | placed    |
+      | 1488 | approved  |
+      | 2020 | delivered |
 
-
-  @get8 @sleep5
-  Структура сценария: GET запрос без указания параметров --> status code == 500
-    * Послали GET '<url>' запрос
-    * Проверили, что статус ошибки 500 соответствует названию ошибки internalError
-
-    Примеры:
-      | url                                                                           |
-      | http://ufrmspr1/ufr-azon-reports-api/reports/?orid=000AJN&reportType=R00A     |
-      | http://ufrmspr1/ufr-azon-reports-api/reports/?usid=0000000I0L&reportType=R00A |
-      | http://ufrmspr1/ufr-azon-reports-api/reports/?orid=000AJN                     |
-      | http://ufrmspr1/ufr-azon-reports-api/reports/?usid=0000000I0L                 |
-      | http://ufrmspr1/ufr-azon-reports-api/reports/?reportType=R00A                 |
-      | http://ufrmspr1/ufr-azon-reports-api/reports/?                                |
-      | http://ufrmspr1/ufr-azon-reports-api/reports/                                 |

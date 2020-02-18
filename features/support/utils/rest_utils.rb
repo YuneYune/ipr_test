@@ -22,6 +22,13 @@ def send_post(url, payload, headers = {})
   @last_response
 end
 
+def send_put(url, payload, headers = {})
+  log_rest_params "Url = #{url} ", "payload = #{payload} ", "headers = #{headers} "
+  RestClient.put(url, payload, headers) {|response, _code| @last_response = response}
+  log_response_params @last_response.code, @last_response.headers, @last_response.body
+  @last_response
+end
+
 def send_delete(path, headers = {})
   # log_rest_params "Url = #{url} ", 'payload = NULL ', "headers = #{headers} "
   RestClient.delete(path, headers) do |response, _request, _result|

@@ -23,7 +23,6 @@ When(/^Послали POST на URL '([^"]*)' с параметрами (.*):$/)
         ],
         "status": "#{variables[17]}"
     }
-    headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
     payload_hash = payload_hash.to_json
   else # создаём заказ
     variables = table.raw.flatten
@@ -35,11 +34,44 @@ When(/^Послали POST на URL '([^"]*)' с параметрами (.*):$/)
         "status": "#{variables[11]}",
         "complete": (!!"#{variables[13]}")
     }
-    headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
     payload_hash = payload_hash.to_json
   end
+  headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
   send_post(urn, payload_hash, headers_hash)
   @requests_payload = payload_hash #json
+end
+
+When(/^Послали PUT на URL '([^"]*)' с параметрами:$/) do |urn, table|
+  variables = table.raw.flatten
+  payload_hash = {
+      "id": "#{variables[3]}".to_i,
+      "category": {
+          "id": "#{variables[5]}".to_i,
+          "name": "#{variables[7]}"
+      },
+      "name": "#{variables[9]}",
+      "photoUrls": [
+          "#{variables[11]}"
+      ],
+      "tags": [
+          {
+              "id": "#{variables[13]}".to_i,
+              "name": "#{variables[15]}"
+          }
+      ],
+      "status": "#{variables[17]}"
+  }
+  headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+  payload_hash = payload_hash.to_json
+  send_put(urn, payload_hash, headers_hash)
+  @requests_payload = payload_hash #json
+  puts @last_response.code
+end
+
+When(/^Послали DELETE '([^"]*)' запрос$/) do |url|
+  @response = send_delete url
+  log_response_params @last_response.code, @last_response.headers, @last_response.body
+  @last_response = @response
 end
 
 When(/^Удалили (.*) с id, которое будем добавлять, послав DELETE запрос на URL '(.*)'$/) do |unnecessary, url|
@@ -47,7 +79,7 @@ When(/^Удалили (.*) с id, которое будем добавлять, 
   send_delete(url, headers_hash)
 end
 
-When(/^Убедились, что мы добавили (.*), сравнив параметры POST и GET запросов$/) do |type|
+When(/^Убедились, что мы (.*) (.*), сравнив параметры (.*) и (.*) запросов$/) do |verb, type, meth1, meth2|
   @last_response = @last_response.body
   if type == 'заказ'
     @requests_payload = JSON.parse @requests_payload
@@ -56,6 +88,10 @@ When(/^Убедились, что мы добавили (.*), сравнив п�
     @last_response.delete('shipDate')
   end
   expect(@last_response == @requests_payload).to be true
+end
+
+When(/^Убедились, что мы удалили (.*)$/) do |type|
+  expect(@last_response.code).to eq(404)
 end
 
 
@@ -89,6 +125,7 @@ When(/Проверили, что в ответе статус у всех жив
 end
 
 When(/^Проверили, что http status code == (\d*)$/) do |code|
+  puts @last_response
   expect(code).to eq(@last_response.code.to_s)
 end
 
@@ -107,7 +144,7 @@ end
 
 When(/^Послали GET '([^"]*)' запрос$/) do |url|
   @response = send_get url
-  # log_response_params @last_response.code, @last_response.headers, @last_response.body
+  log_response_params @last_response.code, @last_response.headers, @last_response.body
   @last_response = @response
 end
 
