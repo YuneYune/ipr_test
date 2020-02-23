@@ -2,6 +2,7 @@
 # require 'selenium-webdriver'
 require 'cucumber'
 require 'open-uri'
+require 'Mysql2'
 
 require 'rest-client'
 

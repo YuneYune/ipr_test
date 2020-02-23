@@ -2,7 +2,7 @@
 
 require 'jsonpath'
 
-When(/^Послали POST на URL '([^"]*)' с параметрами (.*):$/) do |urn, type, table|
+When(/^Послали POST на URL "([^"]*)" с параметрами (.*):$/) do |urn, type, table|
   if type == 'животного' # создаём животное
     variables = table.raw.flatten
     payload_hash = {
@@ -41,7 +41,7 @@ When(/^Послали POST на URL '([^"]*)' с параметрами (.*):$/)
   @requests_payload = payload_hash #json
 end
 
-When(/^Послали PUT на URL '([^"]*)' с параметрами:$/) do |urn, table|
+When(/^Послали PUT на URL "([^"]*)" с параметрами:$/) do |urn, table|
   variables = table.raw.flatten
   payload_hash = {
       "id": "#{variables[3]}".to_i,
@@ -68,13 +68,13 @@ When(/^Послали PUT на URL '([^"]*)' с параметрами:$/) do |u
   puts @last_response.code
 end
 
-When(/^Послали DELETE '([^"]*)' запрос$/) do |url|
+When(/^Послали DELETE "([^"]*)" запрос$/) do |url|
   @response = send_delete url
   log_response_params @last_response.code, @last_response.headers, @last_response.body
   @last_response = @response
 end
 
-When(/^Удалили (.*) с id, которое будем добавлять, послав DELETE запрос на URL '(.*)'$/) do |unnecessary, url|
+When(/^Удалили (.*) с id, которое будем добавлять, послав DELETE запрос на URL "(.*)"$/) do |unnecessary, url|
   headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
   send_delete(url, headers_hash)
 end
@@ -125,7 +125,6 @@ When(/Проверили, что в ответе статус у всех жив
 end
 
 When(/^Проверили, что http status code == (\d*)$/) do |code|
-  puts @last_response
   expect(code).to eq(@last_response.code.to_s)
 end
 
@@ -142,9 +141,9 @@ When(/Проверили, что статус ошибки (.*) соответс
   expect(error).to eq(code_of_error)
 end
 
-When(/^Послали GET '([^"]*)' запрос$/) do |url|
+When(/^Послали GET "(.*)" запрос$/) do |url|
   @response = send_get url
-  log_response_params @last_response.code, @last_response.headers, @last_response.body
+  # log_response_params @last_response.code, @last_response.headers, @last_response.body
   @last_response = @response
 end
 

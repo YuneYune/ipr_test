@@ -1,7 +1,9 @@
 # frozen_string_literal: true
-
+#!/usr/bin/env ruby
+#
 require 'drb'
 require 'json'
+
 
 # запуск drb
 Given('Инициализировали sql подключение') do
@@ -25,8 +27,8 @@ end
 # запрос к БД, который можно использовать до или после сценария
 Given(/^SQL: (.*)$/) do |sql_string|
   # получаем результат выполнения запроса (результат искусственно ограничен 1000 строками)
-  @sql_response = $cucu.sql_select($conn, sql_string)  ## JSON строка - массив
-  arr = JSON.parse @sql_response               ## превретил в массив
+  @sql_response = $cucu.sql_select($conn, sql_string) ## JSON строка - массив
+  arr = JSON.parse @sql_response ## превретил в массив
   i = 0
   # распечатал результат
   arr.each do |r|
