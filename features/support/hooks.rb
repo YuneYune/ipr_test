@@ -23,3 +23,16 @@ After do |scenario|
   end
   # sql_SELECT
 end
+
+
+# Выполняется перед сценарием
+Before('@ui') do
+  remote_or_local
+  set_page_timeouts
+end
+
+# Выполняется после сценария
+After('@ui') do
+  screenshot
+  quit_browser
+end
