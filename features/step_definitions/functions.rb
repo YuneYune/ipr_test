@@ -27,10 +27,10 @@ def wait_while(timeout = 600, retry_interval = 20, *args, &block)
 end
 
 def configure_connection_to_database
-  @connection = Mysql2::Client.new(:host => "sql7.freemysqlhosting.net",
-                     :username => "sql7323655",
-                     :password => "P6P9eCfXe2",
-                     :database => "sql7323655")
+  @connection = Mysql2::Client.new(:host => "remotemysql.com",
+                     :username => "e1DOZmmbdj",
+                     :password => "5lYv85Ujh0",
+                     :database => "e1DOZmmbdj")
 end
 
 def log_in_db_successful(scenario, step)
