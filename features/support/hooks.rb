@@ -14,6 +14,7 @@ AfterStep('@rest') do |_result, step|
   @counter += 1
   steps_name = step.text
   if ENV["DbLogEnable"] == 'true'
+    p "!!!!!!!!!!!!!!!!!!!"
     log_in_db_successful(@scenarios_name, steps_name)
   end
 end
