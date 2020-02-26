@@ -125,7 +125,7 @@ When(/Проверили, что в ответе статус у всех жив
 end
 
 When(/^Проверили, что http status code == (\d*)$/) do |code|
-  expect(code).to eq(@last_response.code.to_s)
+  expect(@last_response.code.to_s).to eq(code)
 end
 
 When(/^Проверили, что status code == (\d*) или (\d*)$/) do |code1, code2|

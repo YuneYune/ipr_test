@@ -6,4 +6,4 @@
   @ui @all
   Сценарий: Элемент поиска
     * Открыли - https://ya.ru
-    * Дождались загрузки - //span[@class='input__box1']
+    * Дождались загрузки - //span[@class='input__box']
