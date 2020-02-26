@@ -5,13 +5,16 @@
 Before('@rest') do |scenario|
   @counter = 0
   @scenarios_name = scenario.name
-  configure_connection_to_database
+  if ENV["DbLogEnable"] == 'true'
+    configure_connection_to_database
+  end
 end
 
 AfterStep('@rest') do |_result, step|
   @counter += 1
   steps_name = step.text
-  if ENV['DbLogEnable'] == true
+  if ENV["DbLogEnable"] == 'true'
+    p "!!!!!!!!!!!!!!!!!!!!!!!"
     log_in_db_successful(@scenarios_name, steps_name)
   end
 end
@@ -21,7 +24,7 @@ After('@rest') do |scenario|
     error = scenario.exception
     arr_of_steps = scenario.test_steps.map(&:text).delete_if { |item| item.include? "hook" }
     arr_of_steps[@counter]
-    if ENV['DbLogEnable'] == true
+    if ENV["DbLogEnable"] == 'true'
       log_in_db_unsuccessful(@scenarios_name, arr_of_steps[@counter], error)
     end
   end
