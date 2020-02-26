@@ -62,6 +62,8 @@
       | 228  | placed    |
       | 1488 | approved  |
       | 2020 | delivered |
+      | 2021 | delivered |
+      | 2022 | delivered |
 
 
   @update_an_animal @all @re
@@ -98,6 +100,8 @@
       | zmeya    | sold      |
       | tarantul | pending   |
       | pingvin  | available |
+      | bandit   | available |
+      | lakey    | available |
 
 
   @delete_an_animal @all
@@ -122,6 +126,9 @@
       | 228  | jiraf  |
       | 1488 | sobaka |
       | 2020 | koshka |
+      | 2020 | ded    |
+      | 2020 | repka  |
+      | 2020 | mishka |
 
 
   @delete_an_animal @all @q

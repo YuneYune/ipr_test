@@ -32,7 +32,7 @@ end
 # Выполняется перед сценарием
 Before('@ui') do
   Selenium::WebDriver::Chrome::Service.driver_path = "chromedriver.exe"
-  @browser = Selenium::WebDriver.for :chrome, options: options
+  @browser = Selenium::WebDriver.for :chrome
   target_size = Selenium::WebDriver::Dimension.new(1600, 1080)
   @browser.manage.window.size = target_size
   # remote_or_local
