@@ -34,15 +34,18 @@ end
 # Выполняется перед сценарием
 Before('@ui') do
   Selenium::WebDriver::Chrome::Service.driver_path = "chromedriver.exe"
-  @browser = Selenium::WebDriver.for :chrome
+  absolute_path = get_filepath('features/support/utils/GoogleChromePortable/App/Chrome-bin/chrome.exe')
+  options = Selenium::WebDriver::Chrome::Options.new(binary: "#{absolute_path}")
+  @browser = Selenium::WebDriver.for(:chrome, options: options)
   target_size = Selenium::WebDriver::Dimension.new(1600, 1080)
   @browser.manage.window.size = target_size
-  # remote_or_local
   set_page_timeouts
 end
 
 # Выполняется после сценария
-After('@ui') do
-  screenshot
+After('@ui') do |scenario|
+  if scenario.failed?
+    screenshot
+  end
   quit_browser
 end
