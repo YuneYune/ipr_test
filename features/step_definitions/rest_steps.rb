@@ -114,7 +114,7 @@ end
 
 When(/^Послали GET "(.*)" запрос$/) do |url|
   @response = send_get url
-  log_response_params @last_response.code, @last_response.headers, @last_response.body
+  # log_response_params @last_response.code, @last_response.headers, @last_response.body
   @last_response = @response
 end
 

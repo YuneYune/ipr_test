@@ -3,12 +3,12 @@
 
 
 Before('@rest') do |scenario|
+  close
   @counter = 0
   @scenarios_name = scenario.name
   if ENV["DbLogEnable"] == 'true'
     configure_connection_to_database
   end
-  configure_connection_to_database
 end
 
 AfterStep('@rest') do |_result, step|

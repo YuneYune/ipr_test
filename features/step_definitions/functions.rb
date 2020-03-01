@@ -1,14 +1,8 @@
 def configure_connection_to_database
-  begin
-    if @connection.close?
-      @connection = Mysql2::Client.new(:host => "remotemysql.com",
-                                       :username => "e1DOZmmbdj",
-                                       :password => "5lYv85Ujh0",
-                                       :database => "e1DOZmmbdj")
-    end
-  rescue => e
-    "Continue"
-  end
+  @connection = Mysql2::Client.new(:host => "remotemysql.com",
+                                   :username => "e1DOZmmbdj",
+                                   :password => "5lYv85Ujh0",
+                                   :database => "e1DOZmmbdj")
 end
 
 def log_in_db_successful(scenario, step)
