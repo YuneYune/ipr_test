@@ -63,7 +63,7 @@ When(/^Послали PUT на URL "([^"]*)" с параметрами:$/) do |u
   }
   headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
   payload_hash = payload_hash.to_json
-  send_put(urn, payload_hash, headers_hash)
+  @response = send_put(urn, payload_hash, headers_hash)
   @requests_payload = payload_hash #json
   puts @last_response.code
 end
@@ -114,7 +114,7 @@ end
 
 When(/^Послали GET "(.*)" запрос$/) do |url|
   @response = send_get url
-  # log_response_params @last_response.code, @last_response.headers, @last_response.body
+  log_response_params @last_response.code, @last_response.headers, @last_response.body
   @last_response = @response
 end
 

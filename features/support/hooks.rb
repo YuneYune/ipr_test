@@ -8,6 +8,7 @@ Before('@rest') do |scenario|
   if ENV["DbLogEnable"] == 'true'
     configure_connection_to_database
   end
+  configure_connection_to_database
 end
 
 AfterStep('@rest') do |_result, step|

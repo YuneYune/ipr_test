@@ -79,7 +79,7 @@
       | t_name | wild                                                        |
       | status | available                                                   |
     * Проверили, что http status code == 200
-    * Послали PUT на URL "https://petstore.swagger.io/v2/pet/updatePet" с параметрами:
+    * Послали PUT на URL "https://petstore.swagger.io/v2/pet" с параметрами:
       | key    | value                                                       |
       | id     | 1488                                                        |
       | c_id   | 228                                                         |
@@ -90,17 +90,17 @@
       | t_name | wild                                                        |
       | status | <status>                                                    |
     * Проверили, что http status code == 200
-    * Послали GET "https://petstore.swagger.io/v2/store/order/1488" запрос
+    * Послали GET "https://petstore.swagger.io/v2/pet/1488" запрос
     * Убедились, что мы обновили животное, сравнив параметры PUT и GET запросов
 
     Примеры:
       | name     | status    |
       | zmeya    | sold      |
-      | tarantul | pending   |
-      | pingvin  | available |
+#      | tarantul | pending   |
+#      | pingvin  | available |
 
 
-  @delete_an_animal @all
+  @delete_an_animal @all @ga
   Структура сценария: Удаление животного
     * Послали POST на URL "https://petstore.swagger.io/v2/pet" с параметрами животного:
       | key    | value                                                       |
