@@ -25,13 +25,7 @@ end
 
 # Таймауты
 def set_page_timeouts
-  @browser.manage.timeouts.implicit_wait = 1 # 10
+  @browser.manage.timeouts.implicit_wait = 10 # 10
   @browser.manage.timeouts.script_timeout = 30 # 10
   @browser.manage.timeouts.page_load = 30
-  @wait = Selenium::WebDriver::Wait.new(timeout: 30) # 10)
-  #  puts @browser.manage.window.size
-  target_size = Selenium::WebDriver::Dimension.new(1600, 1080)
-  @browser.manage.window.size = target_size
-  #  puts @browser.manage.window.size
-  #  puts @browser.manage.timeouts
 end

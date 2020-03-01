@@ -37,8 +37,8 @@ Before('@ui') do
   absolute_path = get_filepath('features/support/utils/GoogleChromePortable/App/Chrome-bin/chrome.exe')
   options = Selenium::WebDriver::Chrome::Options.new(binary: "#{absolute_path}")
   @browser = Selenium::WebDriver.for(:chrome, options: options)
-  target_size = Selenium::WebDriver::Dimension.new(1600, 1080)
-  @browser.manage.window.size = target_size
+  # target_size = Selenium::WebDriver::Dimension.new(1600, 1080)
+  @browser.manage.window.maximize
   set_page_timeouts
 end
 
