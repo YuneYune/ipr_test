@@ -4,7 +4,7 @@
 @rest
 Функционал: REST. http://petstore.swagger.io
 
-  @findByStatus @all
+  @findByStatus @all @sus
   Структура сценария: Находим животных по статусу
     * Послали GET "https://petstore.swagger.io/v2/pet/findByStatus?status=<status>" запрос
     * Проверили, что http status code == 200
