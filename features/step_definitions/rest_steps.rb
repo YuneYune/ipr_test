@@ -95,20 +95,6 @@ When(/^Убедились, что мы удалили (.*)$/) do |type|
 end
 
 
-When(/Проверили, что в ответе значение параметра (.*) имеет длину (.*)/) do |param, length|
-  arr_of_hashes = JSON.parse @last_response.body
-  if arr_of_hashes.class == Array # ---> при GET запросе выдаёт массив словарей(отчётов)
-    arr_of_hashes.flatten.each do |value|
-      parametr = value["#{param}"]
-      expect(parametr.length).to eq(length.to_i)
-    end
-  elsif arr_of_hashes.class == Hash # ---> при POST запросе выдаёт 1 словарь(отчёт), в котором только "rpid"
-    expect(arr_of_hashes["#{param}"].length).to eq(length.to_i)
-  else
-    raise 'Втираешь какую-то дичь'
-  end
-end
-
 When(/Проверили, что в ответе статус у всех животных == (.*) GET запроса/) do |get_status|
   arr_of_statuses = ['sold', 'pending', 'available']
   arr_of_statuses.delete(get_status)
