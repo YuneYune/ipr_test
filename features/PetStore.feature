@@ -4,24 +4,46 @@
 @rest
 Функционал: REST. http://petstore.swagger.io
 
-  @findByStatus @all @sus
-  Структура сценария: Находим животных по статусу
-    * Послали GET "https://petstore.swagger.io/v2/pet/findByStatus?status=<status>" запрос
-    * Проверили, что http status code == 200
-    * Проверили, что в ответе статус у всех животных == <status> GET запроса
+  @gg
+  Сценарий: Находим животных по статусу
+    * Послали GET "http://localhost:1488/pass/B98A2BEA-7D42-4558-8BD1-832F41BAC6FD" запрос
+#    * Проверили, что http status code == 200
+  @gt
+  Сценарий: Находим животных по статусу
+    * Послали GET "http://localhost:1488/pass/2" запрос
+#    * Проверили, что http status code == 200
 
-    Примеры:
-      | status    |
-      | available |
-      | pending   |
-      | sold      |
+  @delete
+  Сценарий: : Удаление животного
+    * Послали DELETE "http://localhost:1488/pass/B98A2BEA-7D42-4558-8BD1-832F41BAC6FX" запрос
+
+  @post
+  Сценарий: Создание животного
+    * Послали POST на URL "http://localhost:1488/pass/" с параметрами:
+      | key            | value      |
+      | FirstName      | Ivan       |
+      | LastName       | Ivanov     |
+      | Patronymic     | Ivanovich  |
+      | PassportNumber | 4518095643 |
+      | DateFrom       | 4518095643 |
+      | DateTo         | 4518095643 |
+
+  @put
+  Сценарий: Создание животного
+    * Послали PUT на URL "http://localhost:1488/pass/" с параметрами:
+      | key            | value      |
+      | guid           | 228        |
+      | FirstName      | Krinj      |
+      | LastName       | Krinj      |
+      | Patronymic     | Ivanovich  |
+      | PassportNumber | 4518095643 |
+      | DateFrom       | 2020-11-12 |
+      | DateTo         | 2020-12-12 |
 
 
-  @create_an_animal @all
-  Структура сценария: Создание животного
-    * Удалили животное с id, которое будем добавлять, послав DELETE запрос на URL "https://petstore.swagger.io/v2/pet/<id>"
-    * Проверили, что status code == 200 или 404
-    * Послали POST на URL "https://petstore.swagger.io/v2/pet" с параметрами животного:
+  @gj
+  Сценарий: Создание животного
+    * Послали POST на URL "http://localhost:1488/post" с параметрами животного:
       | key    | value                                                       |
       | id     | <id>                                                        |
       | c_id   | 228                                                         |
@@ -31,15 +53,7 @@
       | t_id   | 1488                                                        |
       | t_name | wild                                                        |
       | status | available                                                   |
-    * Проверили, что http status code == 200
-    * Послали GET "https://petstore.swagger.io/v2/pet/<id>" запрос
-    * Убедились, что мы добавили животное, сравнив параметры POST и GET запросов
 
-    Примеры:
-      | id   | name   |
-      | 228  | jiraf  |
-      | 1488 | sobaka |
-      | 2020 | koshka |
 
   @create_an_order @all
   Структура сценария: Создание заказа
@@ -94,34 +108,10 @@
     * Убедились, что мы обновили животное, сравнив параметры PUT и GET запросов
 
     Примеры:
-      | name     | status    |
-      | zmeya    | sold      |
+      | name  | status |
+      | zmeya | sold   |
 #      | tarantul | pending   |
 #      | pingvin  | available |
-
-
-  @delete_an_animal @all @ga
-  Структура сценария: Удаление животного
-    * Послали POST на URL "https://petstore.swagger.io/v2/pet" с параметрами животного:
-      | key    | value                                                       |
-      | id     | <id>                                                        |
-      | c_id   | 228                                                         |
-      | c_name | flex                                                        |
-      | name   | <name>                                                      |
-      | ph_url | https://m.media-amazon.com/images/I/81rCvbYgMKL._SS500_.jpg |
-      | t_id   | 1488                                                        |
-      | t_name | wild                                                        |
-      | status | available                                                   |
-    * Проверили, что http status code == 200
-    * Послали DELETE "https://petstore.swagger.io/v2/pet/<id>" запрос
-    * Послали GET "https://petstore.swagger.io/v2/pet/<id>" запрос
-    * Проверили, что http status code == 404
-
-    Примеры:
-      | id   | name   |
-      | 228  | jiraf  |
-      | 1488 | sobaka |
-      | 2020 | koshka |
 
 
   @delete_an_animal @all @q

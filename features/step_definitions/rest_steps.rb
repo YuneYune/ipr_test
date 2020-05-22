@@ -2,40 +2,15 @@
 
 require 'jsonpath'
 
-When(/^Послали POST на URL "([^"]*)" с параметрами (.*):$/) do |urn, type, table|
-  if type == 'животного' # создаём животное
-    variables = table.raw.flatten
-    payload_hash = {
-        "id": "#{variables[3]}".to_i,
-        "category": {
-            "id": "#{variables[5]}".to_i,
-            "name": "#{variables[7]}"
-        },
-        "name": "#{variables[9]}",
-        "photoUrls": [
-            "#{variables[11]}"
-        ],
-        "tags": [
-            {
-                "id": "#{variables[13]}".to_i,
-                "name": "#{variables[15]}"
-            }
-        ],
-        "status": "#{variables[17]}"
-    }
-    payload_hash = payload_hash.to_json
-  else # создаём заказ
-    variables = table.raw.flatten
-    payload_hash = {
-        "id": "#{variables[3]}".to_i,
-        "petId": "#{variables[5]}".to_i,
-        "quantity": "#{variables[7]}".to_i,
-        "shipDate": "#{variables[9]}",
-        "status": "#{variables[11]}",
-        "complete": (!!"#{variables[13]}")
-    }
-    payload_hash = payload_hash.to_json
-  end
+When(/^Послали POST на URL "([^"]*)" с параметрами:$/) do |urn, table|
+  variables = table.raw.flatten
+  payload_hash = {
+      "FirstName": variables[3],
+      "LastName": variables[5],
+      "Patronymic": variables[7],
+      "PassportNumber": variables[9]
+  }
+  payload_hash = payload_hash.to_json
   headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
   send_post(urn, payload_hash, headers_hash)
   @requests_payload = payload_hash #json
@@ -44,28 +19,18 @@ end
 When(/^Послали PUT на URL "([^"]*)" с параметрами:$/) do |urn, table|
   variables = table.raw.flatten
   payload_hash = {
-      "id": "#{variables[3]}".to_i,
-      "category": {
-          "id": "#{variables[5]}".to_i,
-          "name": "#{variables[7]}"
-      },
-      "name": "#{variables[9]}",
-      "photoUrls": [
-          "#{variables[11]}"
-      ],
-      "tags": [
-          {
-              "id": "#{variables[13]}".to_i,
-              "name": "#{variables[15]}"
-          }
-      ],
-      "status": "#{variables[17]}"
+      "guid": variables[3],
+      "FirstName": variables[5],
+      "LastName": variables[7],
+      "Patronymic": variables[9],
+      "PassportNumber": variables[11],
+      "DateFrom": variables[13],
+      "DateTo": variables[15]
   }
-  headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
   payload_hash = payload_hash.to_json
-  @response = send_put(urn, payload_hash, headers_hash)
+  headers_hash = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+  send_put(urn, payload_hash, headers_hash)
   @requests_payload = payload_hash #json
-  puts @last_response.code
 end
 
 When(/^Послали DELETE "([^"]*)" запрос$/) do |url|
@@ -114,7 +79,7 @@ end
 
 When(/^Послали GET "(.*)" запрос$/) do |url|
   @response = send_get url
-  # log_response_params @last_response.code, @last_response.headers, @last_response.body
+  log_response_params @last_response.code, @last_response.headers, @last_response.body
   @last_response = @response
 end
 

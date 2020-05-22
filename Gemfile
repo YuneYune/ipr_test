@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
+gem 'activesupport'
 gem 'cucumber', '=3.1.0'
 gem 'mysql2', '~> 0.5.3'
 gem 'rspec-core'
